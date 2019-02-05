@@ -1,23 +1,28 @@
-# Welcome to serverless. Read the docs
-# https://serverless.com/framework/docs/
-
-# Serverless.yml is the configuration the CLI
-# uses to deploy your code to your provider of choice
-
-# The `service` block is the name of the service
 service: serverless-hello-world
 
-# The `provider` block defines where your service will be deployed
+plugins:
+  - serverless-webpack
+
 provider:
   name: aws
   region: eu-west-2
   runtime: nodejs8.10
 
-# The `functions` block defines what code to deploy
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: yarn
+
+# Per-function packaging.
+package:
+  individually: true
+
 functions:
   helloWorld:
     handler: handler.helloWorld
-    # The `events` block defines how to trigger the handler.helloWorld code
     events:
       - http:
           path: hello-world

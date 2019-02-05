@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports.helloWorld = (event, context, callback) => {
+export const helloWorld = (event, context, callback) => {
   const response = {
     statusCode: 200,
     headers: {
