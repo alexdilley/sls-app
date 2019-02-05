@@ -3,9 +3,9 @@ import { cors, httpHeaderNormalizer } from 'middy/middlewares';
 
 // Whitelist of frontend domains.
 const origins = [
-  'https://example.com',
-  'https://staging.example.com',
-  'http://localhost:8080',
+  process.env.ORIGIN,
+  // Scripted requests from localhost can hit non-production stages *only*.
+  ...(process.env.STAGE !== 'prod' ? ['http://localhost:8080'] : []),
 ];
 
 const helloWorld = middy((event, context, cb) => {
