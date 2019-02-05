@@ -1,14 +1,25 @@
-export const helloWorld = (event, context, callback) => {
+import middy from 'middy';
+import { cors, httpHeaderNormalizer } from 'middy/middlewares';
+
+// Whitelist of frontend domains.
+const origins = [
+  'https://example.com',
+  'https://staging.example.com',
+  'http://localhost:8080',
+];
+
+const helloWorld = middy((event, context, cb) => {
   const response = {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-    },
     body: JSON.stringify({
       message: 'Go Serverless v1.0! Your function executed successfully!',
       input: event,
     }),
   };
 
-  callback(null, response);
-};
+  cb(null, response);
+})
+  .use(httpHeaderNormalizer())
+  .use(cors({ origins, credentials: true }));
+
+export { helloWorld };
